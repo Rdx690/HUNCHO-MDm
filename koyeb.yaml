@@ -1,0 +1,37 @@
+# Koyeb Blueprint-style service configuration.
+# Review the Koyeb UI's current schema before importing; the Dockerfile is the source of truth.
+name: huncho-md
+services:
+  - name: huncho-md-worker
+    type: worker
+    instance_type: nano
+    regions:
+      - fra
+    docker:
+      dockerfile: Dockerfile.koyeb
+    ports: []
+    env:
+      - key: NODE_ENV
+        value: production
+      - key: PREFIX
+        value: "."
+      - key: BOT_NAME
+        value: "HUNCHO MD"
+      - key: PUBLIC_MODE
+        value: "yes"
+      - key: AUTO_READ_STATUS
+        value: "yes"
+      - key: AUTO_DOWNLOAD_STATUS
+        value: "no"
+      - key: PM_PERMIT
+        value: "no"
+      - key: WARN_COUNT
+        value: "3"
+      - key: STARTING_BOT_MESSAGE
+        value: "yes"
+      - key: PRESENCE
+        value: ""
+      - key: ANTI_DELETE_MESSAGE
+        value: "no"
+# Set SESSION_ID, OWNER_NAME, NUMERO_OWNER, BOT_MENU_LINKS and DATABASE_URL
+# through Koyeb's environment/secrets UI. Never commit live credentials.
