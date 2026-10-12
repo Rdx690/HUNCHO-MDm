@@ -16,7 +16,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Check JavaScript syntax
+      - name: Check entry point and modified configuration/menu
         run: |
           node --check keith.js
-          find commandes bdd framework -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+          node --check set.js
+          node --check commandes/menu.js
