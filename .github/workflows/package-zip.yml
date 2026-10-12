@@ -1,0 +1,30 @@
+name: Build modified source ZIP
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Create clean source archive
+        run: |
+          mkdir -p dist
+          zip -r dist/SOURAJIT-VFX-Mini-Bot.zip . \
+            -x ".git/*" "*/.git/*" "node_modules/*" "*/node_modules/*" \
+               "auth/*" "*/auth/*" "set.env" "*/set.env" ".env" "*/.env" \
+               "database.db" "*/database.db" "*.session" "*.log" "dist/*"
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: SOURAJIT-VFX-Mini-Bot
+          path: dist/SOURAJIT-VFX-Mini-Bot.zip
+          if-no-files-found: error
+          retention-days: 7
