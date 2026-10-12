@@ -1,25 +1,16 @@
-FROM node:lts-buster
+FROM node:20-bookworm-slim
 
-RUN apt-get update && \
-  apt-get install -y \
-  ffmpeg \
-  imagemagick \
-  webp && \
-  apt-get upgrade -y && \
-  npm i pm2 -g && \
-  rm -rf /var/lib/apt/lists/*
-  
-RUN git clone https://github.com/Keithkeizzah/HUNCHO-MD.git  /root/bmwMD
-WORKDIR /root/bmwmd/
+ENV NODE_ENV=production
+WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg imagemagick webp git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY package.json .
-RUN npm install pm2 -g
-RUN npm install --legacy-peer-deps
+COPY package*.json ./
+RUN npm install --omit=dev --legacy-peer-deps
 
 COPY . .
 
-EXPOSE 5000
-
+# Koyeb can run this as a worker; WhatsApp bots generally do not need an HTTP port.
 CMD ["node", "keith.js"]
-
